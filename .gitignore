@@ -1,0 +1,10 @@
+foreca.env
+owm.env
+*.log
+*.bak.*
+__pycache__/
+data/*.geojson
+*.sis
+*.sisx
+legacy/
+out/

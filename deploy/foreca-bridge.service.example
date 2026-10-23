@@ -1,0 +1,14 @@
+[Unit]
+Description=Legacy Foreca S60 app -> Foreca Weather API bridge
+After=network-online.target
+
+[Service]
+User=YOURUSER
+WorkingDirectory=/path/to/foreca-s60-bridge/bridge
+Environment=BRIDGE_CONTACT=you@example.com
+ExecStart=/usr/bin/python3 /path/to/foreca-s60-bridge/bridge/bridge.py 8099
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

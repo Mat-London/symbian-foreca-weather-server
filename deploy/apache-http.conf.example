@@ -1,0 +1,18 @@
+# Apache vhost for the plain-HTTP build of the app (app calls http://YOURHOST/fd/...)
+# Needs: a2enmod proxy proxy_http
+<VirtualHost *:80>
+    # the 13-character host you patched into the app, or pw.foreca.com for the DNS-override method
+    ServerName YOURHOST
+    ErrorLog ${APACHE_LOG_DIR}/foreca-bridge-error.log
+    CustomLog ${APACHE_LOG_DIR}/foreca-bridge-access.log combined
+    ProxyPreserveHost Off
+    ProxyTimeout 30
+    ProxyPass /fd/          http://127.0.0.1:8099/fd/
+    ProxyPass /login.php    http://127.0.0.1:8099/login.php
+    ProxyPass /data-loc.php http://127.0.0.1:8099/data-loc.php
+    ProxyPass /data3.php    http://127.0.0.1:8099/data3.php
+    # everything else is refused
+    <LocationMatch "^/(?!(fd/|login\.php|data-loc\.php|data3\.php))">
+        Require all denied
+    </LocationMatch>
+</VirtualHost>

@@ -1,0 +1,20 @@
+# TLS vhost for the https build of the app (app calls https://YOURHOST/login.php, /data-loc.php at the root).
+# Get the certificate first, e.g.:  certbot certonly --webroot -w /var/www/html -d YOURHOST
+# (the phone needs working TLS 1.2+ and current root certificates, e.g. the nnproject.cc TLS update)
+<VirtualHost *:443>
+    ServerName YOURHOST
+    SSLEngine on
+    SSLCertificateFile    /etc/letsencrypt/live/YOURHOST/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/YOURHOST/privkey.pem
+    ErrorLog ${APACHE_LOG_DIR}/foreca-bridge-error.log
+    CustomLog ${APACHE_LOG_DIR}/foreca-bridge-access.log combined
+    ProxyPreserveHost Off
+    ProxyTimeout 30
+    ProxyPass /fd/          http://127.0.0.1:8099/fd/
+    ProxyPass /login.php    http://127.0.0.1:8099/login.php
+    ProxyPass /data-loc.php http://127.0.0.1:8099/data-loc.php
+    ProxyPass /data3.php    http://127.0.0.1:8099/data3.php
+    <LocationMatch "^/(?!(fd/|login\.php|data-loc\.php|data3\.php))">
+        Require all denied
+    </LocationMatch>
+</VirtualHost>
